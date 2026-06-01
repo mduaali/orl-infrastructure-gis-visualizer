@@ -19,6 +19,7 @@ Developed an interactive spatial mapping application designed to isolate, audit,
 * `/QGIS-stormwater/universal_stormwater_map.qgx` - Final high-resolution map layout document.
 * `/QGIS-stormwater/universal_pipes.shp` - Cleaned and verified stormwater pipe geometric data.
 * `/QGIS-stormwater/universal_structures.shp` - Audited stormwater structure points.
+<img width="778" height="905" alt="Screenshot 2026-06-01 at 5 12 37 PM" src="https://github.com/user-attachments/assets/19f4faca-5ef3-4d48-b21a-8caf2bca0666" />
 
 ---
 
@@ -33,6 +34,7 @@ Programmed an open-source data analysis dashboard and interactive web applicatio
 3. **UI/UX Engineering & Control Constraints:** Created a structural sidebar component using Streamlit's state filters, allowing users to actively isolate specific degradation threats by severity (High, Medium, Low). 
 4. **Dynamic Map Customization:** Configured a conditional logic engine to style marker nodes dynamically (e.g., severe pavement failures render as high-visibility red nodes) centered directly over the dynamic I-Drive / resort transportation network junctions.
 5. **Electronic Document Indexing:** Integrated an interactive data log matrix connected to an export framework, giving administrative reviewers the ability to download filtered database records instantly as a clean CSV file.
+<img width="1091" height="591" alt="Screenshot 2026-06-01 at 5 14 23 PM" src="https://github.com/user-attachments/assets/bd8d3470-2f74-494a-a5c2-700699b337d8" />
 
 ### How to Run the Dashboard Locally
 Ensure you have Python installed, clone this directory, and execute the following commands in your terminal:
