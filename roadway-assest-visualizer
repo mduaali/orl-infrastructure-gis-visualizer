@@ -1,0 +1,66 @@
+import streamlit as st
+import pandas as pd
+import folium
+import streamlit.components.v1 as components
+
+try:
+    from streamlit_folium import st_folium
+except ImportError:
+    st_folium = None
+
+st.set_page_config(layout="wide", page_title="Roadway Asset Visualizer")
+st.title("🛣️ Roadway Asset Management Visualizer")
+st.subheader("International Drive & Disney Area Tourist Corridors")
+
+# 1. Pipeline: Automatically generating spreadsheet data to replicate a CSV input
+@st.cache_data
+def load_roadway_data():
+    data = {
+        'Asset_ID': ['AST-101', 'AST-102', 'AST-103', 'AST-104', 'AST-105'],
+        'Street_Name': ['International Drive', 'World Center Drive', 'State Road 535', 'Kirkman Road', 'Epcot Center Drive'],
+        'Latitude': [28.4312, 28.3654, 28.3811, 28.4601, 28.3722],
+        'Longitude': [-81.4697, -81.5321, -81.5032, -81.4485, -81.5148],
+        'Asset_Type': ['Pavement Cracking', 'Traffic Sign', 'Guardrail Damage', 'Pavement Pot-hole', 'Faded Lane Markings'],
+        'Severity': ['High', 'Low', 'Medium', 'High', 'Low']
+    }
+    return pd.DataFrame(data)
+
+df = load_roadway_data()
+
+# 2. Cross-Functional Sidebar Filters
+st.sidebar.header("Filter Constraints")
+severity_choice = st.sidebar.multiselect(
+    "Select Degradation Severity:",
+    options=df['Severity'].unique(),
+    default=df['Severity'].unique()
+)
+filtered_df = df[df['Severity'].isin(severity_choice)]
+
+# 3. Dynamic Map Rendering (Centered near Disney World/I-Drive)
+st.write("### Live Infrastructure Asset Review Map")
+m = folium.Map(location=[28.4000, -81.4900], zoom_start=12)
+
+for idx, row in filtered_df.iterrows():
+    # Assign color markers based on severity metrics
+    color = "red" if row['Severity'] == "High" else "orange" if row['Severity'] == "Medium" else "green"
+    folium.Marker(
+        location=[row['Latitude'], row['Longitude']],
+        popup=f"<b>{row['Street_Name']}</b><br>{row['Asset_Type']}<br>Severity: {row['Severity']}",
+        icon=folium.Icon(color=color, icon="info-sign")
+    ).add_to(m)
+
+# Render the folium map canvas in Streamlit
+st_folium(m, width=1000, height=500)
+
+# 4. Electronic Index Data Table & Export System
+st.write("### Electronic Asset Maintenance Log")
+st.dataframe(filtered_df)
+
+# Convert active DataFrame to CSV download link to fulfill document index requirement
+csv_data = filtered_df.to_csv(index=False).encode('utf-8')
+st.download_button(
+    label="📥 Export Cleaned Spreadsheet Data",
+    data=csv_data,
+    file_name="cleaned_disney_idrive_assets.csv",
+    mime="text/csv"
+)
